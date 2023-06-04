@@ -17,11 +17,11 @@ const verifyJWT = (req, res, next) => {
     return res.status(401).send({ error: true, message: "unauthorized access" })
   }
   const token = authorization.split(' ')[1];
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decode) => {
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
     if (err) {
       return res.status(401).send({ error: true, message: 'unauthorized access' })
     }
-    req.decode = decode
+    req.decoded = decoded
     next()
   })
 }
@@ -75,7 +75,7 @@ async function run() {
       // email same
       // check admin
 
-      app.get('users/admin/:email', verifyJWT, async(req, res)=> {
+      app.get('/users/admin/:email', verifyJWT, async(req, res)=> {
         const email =req.params.email 
 
         if(req.decoded.email !== email){
